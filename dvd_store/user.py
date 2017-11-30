@@ -16,18 +16,13 @@ class User:
         self.__cart = ""
         self.__authenticated = False
         self.__authorized = False
+        self.__statusCode = 0
 
         # Check if user is unregistered, AKA instantiated User object without any arguments
         if (membershipID == ""):
-
             # Unregistered, generate a membershipID and initialize additional fields
             self.__id = uuid.uuid4()
             self.__cart = Cart()
-
-            # todo - testing
-            print(self.__cart)
-
-            # todo - Do we check if the arguments for firstname, lastname, and phone number are not blank?
 
         else:
             # Set the submitted membershipID
@@ -36,26 +31,26 @@ class User:
             # Check if the user is in our "database", if he does return their data
             userRecord = self.__checkUserExists()
 
-            # todo - User does not exist, do something
+            # User does not exist, set the appropriate status code
             if not userRecord:
-
-                print("User does not exist")
-
+                self.__statusCode = 1
                 self.__authorized = False
 
             # User exist, map to object fields
             else:
-                self.__firstName = userRecord[2]
-                self.__lastName = userRecord[3]
-                self.__phoneNumber = userRecord[4]
-
+                self.__firstName = userRecord[1]
+                self.__lastName = userRecord[2]
+                self.__phoneNumber = userRecord[3]
                 self.__authorized = True
 
             # Create a history Record for this login attempt
             self. __logHistory()
 
     def __str__(self):
-        return "User ID " + str(self.__id) + " belongs to " + self.__firstName + " " + self.__lastName + " at " + self.__phoneNumber
+        if self.__authorized == True:
+            return "User ID " + str(self.__id) + " belonging to " + self.__firstName + " " + self.__lastName + " (" + self.__phoneNumber + ") is now logged in"
+        else:
+            return self.__statusCodeMessage(self.__statusCode)
 
     def getID(self):
         return self.__id
@@ -68,6 +63,9 @@ class User:
 
     def getPhoneNumber(self):
         return self.__phoneNumber
+
+    def getAuthorized(self):
+        return self.__authorized
 
     def setFirstName(self, firstName):
         self.__firstName = firstName
@@ -87,6 +85,17 @@ class User:
 
         # Close the File
         usersFile.close()
+
+        # Set the user to Authorized
+        self.__authorized = True
+
+    def __statusCodeMessage(self, statusCode):
+        if statusCode == 0:
+            return "User not found"
+        elif statusCode == 1:
+            return "User does not Exist"
+        elif statusCode == 2:
+            return "User Successfully signed in"
 
     def __checkUserExists(self):
         try:

@@ -1,7 +1,7 @@
 import uuid;
 
 class Cart:
-
+    __cartFile = "cart.csv"
     def __init__(self):
         self.__id = uuid.uuid4()
         self.__basket = {}
