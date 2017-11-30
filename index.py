@@ -6,7 +6,8 @@ def main():
     userAction = None
     user = None
     browsingAction = None
-    store = dvd_store.Store(0.07)]
+    store = dvd_store.Store(0.07)
+    cart = None
 
     # Prompt User to Login or Register
     while userAction == None:
@@ -30,10 +31,13 @@ def main():
 
         # Check User Authorization
         if user.getAuthorized() == False:
-            print(user) # Print the User state
             userAction = None
 
     print(user) # Print the User state
+    # By this point user should pertain to a valid user, check to see that they are a valid user
+    if(user.getAuthorized()):
+        # Create a Cart for this User
+        cart = dvd_store.Cart(user.getID(), store.getTaxRate())
 
     # Iterate over Browsing Options
     while browsingAction == None:
@@ -49,25 +53,74 @@ def main():
         except ValueError as err:
             browsingAction = None
 
-        if browsingAction == 1:
+        if browsingAction == 1: # List
+            print("Here is the list of our inventory ")
             store.displayInventory()
             print()
             browsingAction = None
             
-        elif browsingAction == 2:
+        elif browsingAction == 2: # Cart
             print("stuff")
             browsingAction = None
 
-        elif browsingAction == 3:
-            print("more stuff")
+        elif browsingAction == 3: # Add
+
+            productID = None
+            productQty = None
+            stock = store.getInventory()
+
+            while productID == None:
+                try:
+                    productID = int(input("Which product number would you like to add to the cart? ")) - 1
+                except ValueError as err:
+                    print(err)
+
+            while productQty == None:
+                try:
+                    productQty = int(input("What quantity?"))
+                except ValueError as err:
+                    print(err)
+
+            # Add the item to the Cart
+            cart.addItem(productID, productQty, stock[productID], stock)
+
+            # todo - print feedback that the item was actually added to the store
+            print(cart) # todo - For now print the cart for temporary feedback
+
             browsingAction = None
 
-        elif browsingAction == 4:
-            print("even more stuff")
+        elif browsingAction == 4: # Remove
+            productID = None
+            productQty = None
+            stock = store.getInventory()
+
+            # todo - display the contents of the Cart, same as the method used within a "cart" browsingAction
+
+            while productID == None:
+                try:
+                    productID = int(input("Which product number would you like to REMOVE from the cart? ")) - 1
+                except ValueError as err:
+                    print(err)
+
+            while productQty == None:
+                try:
+                    productQty = int(input("What quantity?"))
+                except ValueError as err:
+                    print(err)
+
+            # Remove from Cart
+            cart.removeItem(productID, productQty)
+
+            # todo - print feedback that the item was actually removed from the store
+            print(cart)  # todo - For now print the cart for temporary feedback
+
             browsingAction = None
             
-        else browsingAction == 5:
+        elif browsingAction == 5: # Checkout
             print("okay that's enough stuff")
+            browsingAction = None
+
+        else:
             browsingAction = None
 
 # Function used to validate UserActions

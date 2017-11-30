@@ -2,13 +2,14 @@ import uuid;
 
 class Cart:
     __cartFile = "cart.csv"
-    def __init__(self):
+    def __init__(self, userID, taxRate):
         self.__id = uuid.uuid4()
         self.__basket = {}
         self.__subtotal = 0.0
         self.__total = 0.0
-        self.__taxRate = 0
+        self.__taxRate = taxRate
         self.__itemsInBasket = 0
+        self.__userID = userID
 
     def __str__(self):
         return "This cart with ID " + str(self.__id) + " has " + str(self.__itemsInBasket) \
@@ -61,8 +62,6 @@ class Cart:
 
     def addItem(self, productID, qty, productDetails, inventory):
         """Adds an item to self's basket list"""
-        print("STOCK")
-        print(inventory)
 
         # Check that productID is an integer, if not return False
         try:

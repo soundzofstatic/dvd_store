@@ -1,7 +1,7 @@
 import uuid
 import time
 from datetime import datetime
-from .cart import Cart
+#from .cart import Cart
 
 class User:
 
@@ -13,7 +13,7 @@ class User:
         self.__firstName = ""
         self.__lastName = ""
         self.__phoneNumber = ""
-        self.__cart = Cart()
+        #self.__cart = Cart()
         self.__authenticated = False
         self.__authorized = False
         self.__statusCode = 0
