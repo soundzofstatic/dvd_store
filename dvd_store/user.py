@@ -13,7 +13,7 @@ class User:
         self.__firstName = ""
         self.__lastName = ""
         self.__phoneNumber = ""
-        self.__cart = ""
+        self.__cart = Cart()
         self.__authenticated = False
         self.__authorized = False
         self.__statusCode = 0
@@ -22,7 +22,6 @@ class User:
         if (membershipID == ""):
             # Unregistered, generate a membershipID and initialize additional fields
             self.__id = uuid.uuid4()
-            self.__cart = Cart()
 
         else:
             # Set the submitted membershipID

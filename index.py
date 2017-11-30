@@ -6,7 +6,7 @@ def main():
     userAction = None
     user = None
     browsingAction = None
-    store = dvd_store.Store(0.07)
+    store = dvd_store.Store(0.07)]
 
     # Prompt User to Login or Register
     while userAction == None:
@@ -39,8 +39,9 @@ def main():
     while browsingAction == None:
 
         # Call on store.displayOptions()
-        #store.displayOptions()
-
+        store.displayOptions()
+        print()
+        
         try:
             # Prompt the user for their choice
             browsingAction = validateBrowsingAction(int(input("Provide the option number of the action you would like to do.")))
@@ -48,6 +49,26 @@ def main():
         except ValueError as err:
             browsingAction = None
 
+        if browsingAction == 1:
+            store.displayInventory()
+            print()
+            browsingAction = None
+            
+        elif browsingAction == 2:
+            print("stuff")
+            browsingAction = None
+
+        elif browsingAction == 3:
+            print("more stuff")
+            browsingAction = None
+
+        elif browsingAction == 4:
+            print("even more stuff")
+            browsingAction = None
+            
+        else browsingAction == 5:
+            print("okay that's enough stuff")
+            browsingAction = None
 
 # Function used to validate UserActions
 def validateUserAction(action):
@@ -60,17 +81,17 @@ def validateUserAction(action):
 
 # Function used to validate BrowsingActions
 def validateBrowsingAction(action):
-    if action == 0: #"list"
+    if action == 1: #"list"
         return action
-    elif action == 1: #"cart"
+    elif action == 2: #"cart"
         return action
-    elif action == 2: #"add"
+    elif action == 3: #"add"
         return action
-    elif action == 3: #"remove"
+    elif action == 4: #"remove"
         return action
-    elif action == 4: #"checkout"
+    elif action == 5: #"checkout"
         return action
     else:
         return None
-
+    
 main()
