@@ -8,7 +8,7 @@ class Store:
         self.__Inventory = self.setInventory()
         
         self.__taxRate = taxRate
-        print(self.__storeInventory
+        print(self.__storeInventory)
 
     def getTaxRate(self):
         return self.__taxRate
@@ -17,7 +17,11 @@ class Store:
     def setTaxRate(self, taxRate):
         self.__taxRate = taxRate     
 
-
+    def displayOptions(self):
+        print("Here are your options for the store:")
+        print("Inventory")
+        print("Cart")
+        print("Checkout")
     
     def getInventory(self):
         return self.__storeInventory
