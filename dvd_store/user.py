@@ -8,25 +8,21 @@ class User:
     __userFile = "users.csv"
     __userHistory = "usersHistory.csv"
 
-    def __init__(self, membershipID = "", password = "", firstName = "", lastName = "", phoneNumber = ""):
+    def __init__(self, membershipID = "", firstName = "", lastName = "", phoneNumber = ""):
         # Preset the fields for the object to blank, since we don't know if the user is registering or Signing-in
-        self.__password = ""
         self.__firstName = ""
         self.__lastName = ""
         self.__phoneNumber = ""
         self.__cart = ""
         self.__authenticated = False
         self.__authorized = False
+        self.__statusCode = 0
 
         # Check if user is unregistered, AKA instantiated User object without any arguments
         if (membershipID == ""):
-
             # Unregistered, generate a membershipID and initialize additional fields
             self.__id = uuid.uuid4()
             self.__cart = Cart()
-
-            # todo - testing
-            print(self.__cart)
 
         else:
             # Set the submitted membershipID
@@ -35,37 +31,26 @@ class User:
             # Check if the user is in our "database", if he does return their data
             userRecord = self.__checkUserExists()
 
-            # todo - User does not exist, do something
+            # User does not exist, set the appropriate status code
             if not userRecord:
-
-                print("User does not exist")
+                self.__statusCode = 1
+                self.__authorized = False
 
             # User exist, map to object fields
             else:
-                self.__password = userRecord[1]
-                self.__firstName = userRecord[2]
-                self.__lastName = userRecord[3]
-                self.__phoneNumber = userRecord[4]
-
-            # Check if password was not left blank, thus the user is trying to login implicitly
-            if password != "":
-                authorized = self.__checkPassword(password)
-
-                if authorized:
-
-                    self.__authorized = True
-
-                    # todo - Get the user's last unresolved cart
-
-                else:
-                    self.__authorized = False
-
+                self.__firstName = userRecord[1]
+                self.__lastName = userRecord[2]
+                self.__phoneNumber = userRecord[3]
+                self.__authorized = True
 
             # Create a history Record for this login attempt
             self. __logHistory()
 
     def __str__(self):
-        return "User ID " + str(self.__id) + " belongs to " + self.__firstName + " " + self.__lastName + " at " + self.__phoneNumber
+        if self.__authorized == True:
+            return "User ID " + str(self.__id) + " belonging to " + self.__firstName + " " + self.__lastName + " (" + self.__phoneNumber + ") is now logged in"
+        else:
+            return self.__statusCodeMessage(self.__statusCode)
 
     def getID(self):
         return self.__id
@@ -79,8 +64,8 @@ class User:
     def getPhoneNumber(self):
         return self.__phoneNumber
 
-    def setPassword(self, password):
-        self.__password = password
+    def getAuthorized(self):
+        return self.__authorized
 
     def setFirstName(self, firstName):
         self.__firstName = firstName
@@ -96,10 +81,21 @@ class User:
         usersFile = open(self.__userFile, 'a')
 
         # Write to the File
-        usersFile.write(str(self.__id) + "," + self.__password + "," + self.__firstName + "," + self.__lastName + "," + self.__phoneNumber + "\n")
+        usersFile.write(str(self.__id) + "," + self.__firstName + "," + self.__lastName + "," + self.__phoneNumber + "\n")
 
         # Close the File
         usersFile.close()
+
+        # Set the user to Authorized
+        self.__authorized = True
+
+    def __statusCodeMessage(self, statusCode):
+        if statusCode == 0:
+            return "User not found"
+        elif statusCode == 1:
+            return "User does not Exist"
+        elif statusCode == 2:
+            return "User Successfully signed in"
 
     def __checkUserExists(self):
         try:
@@ -130,14 +126,6 @@ class User:
             return False
 
             # Scan each file in CSV for a matching UUID
-
-    def __checkPassword(self, password):
-
-        if password == self.__password:
-            return True
-
-        else:
-            return False
 
     def __logHistory(self):
         # Open File to Write to
