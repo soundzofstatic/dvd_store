@@ -2,15 +2,17 @@ import csv
 
 class Store:
 
-    __INVENTORYFILE = "products.csv"
+    __INVENTORY_FILE = "products.csv"
     
     def __init__(self, taxRate):
-        self.__Inventory = self.setInventory()
+        self.__Inventory = self.auditInventory()
         self.__taxRate = taxRate
 
     def getTaxRate(self):
         return self.__taxRate
 
+    def getInventory(self):
+        return self.__Inventory
 
     def setTaxRate(self, taxRate):
         self.__taxRate = taxRate     
@@ -22,17 +24,6 @@ class Store:
         for option in options:
             Variablenum += 1
             print(str(Variablenum), option)
-    
-    def getInventory(self):
-        return self.__Inventory
-
-    def setInventory(self): #todo - this method name is misleading since setters are typically void functions that do not return anything
-        Inventory = []
-        inventory_list = open(self.__INVENTORYFILE, 'r')
-        for row in inventory_list:
-            Inventory.append(row.strip().split(','))
-            
-        return Inventory
 
     def displayInventory(self):
         Variablenum = 0
@@ -40,4 +31,10 @@ class Store:
             Variablenum += 1
             print(str(Variablenum) + " " + Itemlist[0] + " <> " + Itemlist[1])
 
-        
+    def auditInventory(self):
+        Inventory = []
+        inventory_list = open(self.__INVENTORY_FILE, 'r')
+        for row in inventory_list:
+            Inventory.append(row.strip().split(','))
+            
+        return Inventory

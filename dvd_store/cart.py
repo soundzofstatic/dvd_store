@@ -1,7 +1,7 @@
 import uuid;
 
 class Cart:
-    __cartFile = "cart.csv"
+    __CART_FILE = "cart.csv"
     def __init__(self, userID, taxRate):
         self.__id = uuid.uuid4()
         self.__basket = {}
@@ -82,7 +82,7 @@ class Cart:
         # Check if product with key `productID` is in the dictionary
         if productID not in self.__basket:
             # Convert productDetails list to a dictionary with mapped keys
-            productDictionary = self.mapProductListToDictionary(productDetails)
+            productDictionary = self.__mapProductListToDictionary(productDetails)
 
             # append the quantity to add
             productDictionary["qty"] = qty
@@ -123,7 +123,7 @@ class Cart:
         # Calculate the amount of Items in the Basket
         self.__calculateItemsInBasket()
 
-    def mapProductListToDictionary(self, productList):
+    def __mapProductListToDictionary(self, productList):
         """Returns a mapped dictionary from a list passed in"""
         # initialize an empty dictionary
         dictionary = {}

@@ -5,8 +5,9 @@ from datetime import datetime
 
 class User:
 
-    __userFile = "users.csv"
-    __userHistory = "usersHistory.csv"
+    __USER_FILE = "users.csv"
+
+    __USER_HISTORY = "usersHistory.csv"
 
     def __init__(self, membershipID = "", firstName = "", lastName = "", phoneNumber = ""):
         # Preset the fields for the object to blank, since we don't know if the user is registering or Signing-in
@@ -14,7 +15,6 @@ class User:
         self.__lastName = ""
         self.__phoneNumber = ""
         #self.__cart = Cart()
-        self.__authenticated = False
         self.__authorized = False
         self.__statusCode = 0
 
@@ -77,7 +77,7 @@ class User:
 
     def registerUser(self):
         # Open File to Write to
-        usersFile = open(self.__userFile, 'a')
+        usersFile = open(self.__USER_FILE, 'a')
 
         # Write to the File
         usersFile.write(str(self.__id) + "," + self.__firstName + "," + self.__lastName + "," + self.__phoneNumber + "\n")
@@ -99,7 +99,7 @@ class User:
     def __checkUserExists(self):
         try:
             # Open file
-            usersFile = open(self.__userFile, 'r')
+            usersFile = open(self.__USER_FILE, 'r')
 
             # iterate over file reading each line
             for line in usersFile:
@@ -128,7 +128,7 @@ class User:
 
     def __logHistory(self):
         # Open File to Write to
-        historyFile = open(self.__userHistory, 'a')
+        historyFile = open(self.__USER_HISTORY, 'a')
 
         # Write to the File
         historyFile.write(
