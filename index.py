@@ -49,6 +49,7 @@ def main():
         try:
             # Prompt the user for their choice
             browsingAction = validateBrowsingAction(int(input("Provide the option number of the action you would like to do.")))
+            print()  # Empty line for readability
 
         except ValueError as err:
             browsingAction = None
@@ -64,7 +65,6 @@ def main():
             browsingAction = None
 
         elif browsingAction == 3: # Add
-
             productID = None
             productQty = None
             stock = store.getInventory()
@@ -84,17 +84,19 @@ def main():
             # Add the item to the Cart
             cart.addItem(productID, productQty, stock[productID], stock)
 
-            # todo - print feedback that the item was actually added to the store
-            print(cart) # todo - For now print the cart for temporary feedback
+            print() # Empty line for readability
+
+            # Display the current contents of the Cart so the user can see the changes they have made
+            cart.showBasketList()
 
             browsingAction = None
 
         elif browsingAction == 4: # Remove
             productID = None
             productQty = None
-            stock = store.getInventory()
 
-            # todo - display the contents of the Cart, same as the method used within a "cart" browsingAction
+            # Display the current contents of the Cart
+            cart.showBasketList()
 
             while productID == None:
                 try:
@@ -111,8 +113,10 @@ def main():
             # Remove from Cart
             cart.removeItem(productID, productQty)
 
-            # todo - print feedback that the item was actually removed from the store
-            print(cart)  # todo - For now print the cart for temporary feedback
+            print()  # Empty line for readability
+
+            # Display the current contents of the Cart so the user can see the changes they have made
+            cart.showBasketList()
 
             browsingAction = None
             
