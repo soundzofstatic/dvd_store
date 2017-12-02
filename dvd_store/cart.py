@@ -165,3 +165,11 @@ class Cart:
         for itemId in self.__basket:
             # Multiply price by quantity and accumulate on self.__subtotal
             self.__itemsInBasket += int(self.__basket[itemId]['qty'])
+
+    def checkout(self)
+        fd = open('cart.csv','a')
+        fd.write(self.__basket)
+        fd.write(self.__subtotal)
+        fd.write(self.__taxRate)
+        fd.write(self.__total)
+        fd.close()
