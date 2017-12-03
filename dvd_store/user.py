@@ -7,7 +7,7 @@ class User:
 
     __USER_FILE = "users.csv"
 
-    __USER_HISTORY = "usersHistory.csv"
+    __USER_HISTORY_FILE = "usersHistory.csv"
 
     def __init__(self, membershipID = "", firstName = "", lastName = "", phoneNumber = ""):
         # Preset the fields for the object to blank, since we don't know if the user is registering or Signing-in
@@ -67,13 +67,13 @@ class User:
         return self.__authorized
 
     def setFirstName(self, firstName):
-        self.__firstName = firstName
+        self.__firstName = firstName.rstrip()
 
     def setLastName(self, lastName):
-        self.__lastName = lastName
+        self.__lastName = lastName.rstrip()
 
     def setPhoneNumber(self, phoneNumber):
-        self.__phoneNumber = phoneNumber
+        self.__phoneNumber = phoneNumber.rstrip()
 
     def registerUser(self):
         # Open File to Write to
@@ -128,7 +128,7 @@ class User:
 
     def __logHistory(self):
         # Open File to Write to
-        historyFile = open(self.__USER_HISTORY, 'a')
+        historyFile = open(self.__USER_HISTORY_FILE, 'a')
 
         # Write to the File
         historyFile.write(

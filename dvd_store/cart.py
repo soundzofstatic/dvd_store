@@ -2,12 +2,14 @@ import uuid
 
 class Cart:
     __CART_FILE = "cart.csv"
+    __TRANSACTION_FILE = "transaction.csv"
     def __init__(self, userID, taxRate):
         self.__id = uuid.uuid4()
         self.__basket = {}
         self.__subtotal = 0.0
         self.__total = 0.0
         self.__taxRate = taxRate
+        self.__taxAmount = 0.0
         self.__itemsInBasket = 0
         self.__userID = userID
 
@@ -32,6 +34,10 @@ class Cart:
         """Returns the total amount of self"""
         return self.__total
 
+    def getTaxAmount(self):
+        """Returns the tax amount of self"""
+        return self.__taxAmount
+
     def getTaxRate(self):
         """Returns the tax rate of self"""
         return self.__taxRate
@@ -39,15 +45,14 @@ class Cart:
     def showBasketList(self):
         """Prints the basket list of self in a human readable format"""
 
-        print("-------------Current Basket-------------")
         print("----------------------------------------")
+        print("-------------Current Basket-------------")
         # Print Headers
-        print("ID | NAME | QTY")
+        print("ID - NAME - QTY")
 
         for key in self.__basket:
-            print(str(key + 1) + " | " + str(self.__basket[key]['name']) + " | " + str(self.__basket[key]['qty']))
+            print(str(key + 1) + " - " + str(self.__basket[key]['name']) + " - " + str(self.__basket[key]['qty']))
 
-        print("----------------------------------------")
         print("--------------- " + str(self.__itemsInBasket) + " Items ---------------")
         print("----------------------------------------")
         print()
@@ -105,6 +110,9 @@ class Cart:
         # Calculate and Update the Total
         self.__calculateTotal()
 
+        # Calculate and Update the Tax Amount
+        self.__calculateTaxAmount()
+
         # Calculate the amount of Items in the Basket
         self.__calculateItemsInBasket()
 
@@ -126,8 +134,31 @@ class Cart:
         # Calculate and Update the Total
         self.__calculateTotal()
 
+        # Calculate and Update the Tax Amount
+        self.__calculateTaxAmount()
+
         # Calculate the amount of Items in the Basket
         self.__calculateItemsInBasket()
+
+    def checkout(self):
+
+        # Open the file in append mode
+        fd = open(self.__CART_FILE, 'a')
+
+        # Iterate over the self.__basket dictionary
+        for k,v in self.__basket.items():
+            # Add each Cart item to the Cart file using the self.__id and self.__userID unique keys
+            # CSV Format: CARTID, USERID, PRODUCT NAME, PRICE, QTY
+            fd.write(str(self.__id) + "," + self.__userID + "," + v['name'] + "," + str(v['price']) + "," + str(v['qty']) + "\n")
+        # Close cart file
+        fd.close()
+
+        # In order to house the details of the transaction, let's save that in a transaction file
+        # Open the file in append mode
+        transFile = open(self.__TRANSACTION_FILE, 'a')
+        # CSV Format: CARTID, USERID, ITEM Quantity, SUBTOTAL, TAX AMOUNT, TAXRATE, TOTAL
+        transFile.write(str(self.__id) + "," + self.__userID + "," + str(self.__itemsInBasket) + "," + str(self.__subtotal) + "," + str(format(self.__taxAmount, '.2f')) + "," + str(format(self.__taxRate, '.2%')) + "," + str(self.__total) + "\n")
+        transFile.close()
 
     def __mapProductListToDictionary(self, productList):
         """Returns a mapped dictionary from a list passed in"""
@@ -158,6 +189,15 @@ class Cart:
         # Clean up subtotal formatting
         self.__subtotal = format(self.__subtotal, '.2f')
 
+    def __calculateTaxAmount(self):
+        try:
+            # Calculate Tax amount
+            self.__taxAmount = float(self.__total) - float(self.__subtotal)
+        except ValueError as err:
+            self.__taxAmount = 0.0
+        except Exception as err:
+            self.__taxAmount = 0.0
+
     def __calculateTotal(self):
         """Private method used to calculate the total of self"""
         self.__total= format(float(self.__subtotal) + (float(self.__subtotal) * float(self.__taxRate)), '.2f')
@@ -171,11 +211,3 @@ class Cart:
         for itemId in self.__basket:
             # Multiply price by quantity and accumulate on self.__subtotal
             self.__itemsInBasket += int(self.__basket[itemId]['qty'])
-
-    def checkout(self):
-        fd = open('cart.csv','a')
-        fd.write(self.__basket)
-        fd.write(self.__subtotal)
-        fd.write(self.__taxRate)
-        fd.write(self.__total)
-        fd.close()
