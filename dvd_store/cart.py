@@ -1,4 +1,4 @@
-import uuid;
+import uuid
 
 class Cart:
     __CART_FILE = "cart.csv"
@@ -38,13 +38,19 @@ class Cart:
 
     def showBasketList(self):
         """Prints the basket list of self in a human readable format"""
-        print(self.__basket)
 
+        print("-------------Current Basket-------------")
+        print("----------------------------------------")
         # Print Headers
         print("ID | NAME | QTY")
 
         for key in self.__basket:
-            print(str(key) + " | " + str(self.__basket[key]['name']) + " | " + str(self.__basket[key]['qty']))
+            print(str(key + 1) + " | " + str(self.__basket[key]['name']) + " | " + str(self.__basket[key]['qty']))
+
+        print("----------------------------------------")
+        print("--------------- " + str(self.__itemsInBasket) + " Items ---------------")
+        print("----------------------------------------")
+        print()
 
     def setTaxRate(self, taxRate):
         """Sets the tax rate of self"""
