@@ -62,7 +62,7 @@ def main():
             
         elif browsingAction == 2: # Cart
             print("Here is the current contents of your cart: ")
-            print(cart)
+            cart.showBasketList()
             print()
             browsingAction = None
 
@@ -122,15 +122,11 @@ def main():
 
             browsingAction = None
             
-        elif browsingAction == 5: # Checkout
-            fd = open('cart.csv','r')
-            Subtotal = dvd_store.Cart(cart.getSubtotal())
-            Total = dvd_store.Cart(cart.getTotal())
-            fd.close()
-            print("Your subtotal is: $ ", Subtotal)
+        elif browsingAction == 5: # Checkout            
+            print("Your subtotal is: $ ", cart.getSubtotal())
             print()
-            print("Your total including the tax rate is: $ ", Total)
-            
+            print("Your total including the tax rate is: $ ", cart.getTotal())
+            print()
             browsingAction = None
 
         else:
