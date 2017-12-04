@@ -34,6 +34,11 @@ class User:
             if not userRecord:
                 self.__statusCode = 1
                 self.__authorized = False
+                print()
+                print("*************** WARNING ****************")
+                print("\nUser does not exist\n")
+                print("*************** WARNING ****************")
+                print()
 
             # User exist, map to object fields
             else:
@@ -67,13 +72,13 @@ class User:
         return self.__authorized
 
     def setFirstName(self, firstName):
-        self.__firstName = firstName.rstrip()
+        self.__firstName = firstName.strip()
 
     def setLastName(self, lastName):
-        self.__lastName = lastName.rstrip()
+        self.__lastName = lastName.strip()
 
     def setPhoneNumber(self, phoneNumber):
-        self.__phoneNumber = phoneNumber.rstrip()
+        self.__phoneNumber = phoneNumber.strip()
 
     def registerUser(self):
         # Open File to Write to

@@ -121,12 +121,24 @@ class Cart:
         # Check if product with key `productID` is in the dictionary
         if productID in self.__basket:
             if(qty > self.__basket[productID]['qty']):
+                print()
+                print("*************** WARNING ****************")
+                print("\n", end="")
                 print("Quantity for removal exceeds amount in basket")
+                print("\n", end="")
+                print("*************** WARNING ****************")
+                print()
             else:
                 # Update the qty
                 self.__basket[productID]['qty'] = self.__basket[productID]['qty'] - qty
         else:
-            print("Item not in basket")
+            print()
+            print("*************** WARNING ****************")
+            print("\n", end="")
+            print("Item \"" + productID + "\" not in basket")
+            print("\n", end="")
+            print("*************** WARNING ****************")
+            print()
 
         # Calculate and Update the Subtotal
         self.__calculateSubtotal()

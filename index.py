@@ -41,9 +41,11 @@ def main():
                 userAction = "exit"
                 continue
 
-            # Check User Authorization
-            if user.getAuthorized() == False:
-                userAction = None
+            # Check that userAction is still not equal to None
+            if userAction != None:
+                # Check User Authorization
+                if user.getAuthorized() == False:
+                    userAction = None
 
         if userAction != "exit":
             # By this point user should pertain to a valid user, check to see that they are a valid user
@@ -71,6 +73,10 @@ def main():
                 print()  # Empty line for readability
 
             except ValueError as err:
+                warning(err)
+                browsingAction = None
+            except Exception as err:
+                warning(err)
                 browsingAction = None
 
             if browsingAction == 1: # List
@@ -98,14 +104,18 @@ def main():
                         productID = int(input("Which product number would you like to add to the cart?\n")) - 1
                         print()
                     except ValueError as err:
-                        print(err)
+                        warning(err)
+
+                    # Check if the ProductID is within the stock
+                    if not checkProductInList(productID, stock):
+                        productID = None
 
                 while productQty == None:
                     try:
                         productQty = int(input("What quantity?\n"))
                         print()
                     except ValueError as err:
-                        print(err)
+                        warning(err)
 
                 # Add the item to the Cart
                 cart.addItem(productID, productQty, stock[productID], stock)
@@ -129,14 +139,18 @@ def main():
                         productID = int(input("Which product number would you like to REMOVE from the cart?\n")) - 1
                         print()
                     except ValueError as err:
-                        print(err)
+                        warning(err)
+
+                    # Check if the ProductID is within the store.getInventory()
+                    if not checkProductInList(productID, store.getInventory()):
+                        productID = None
 
                 while productQty == None:
                     try:
                         productQty = int(input("What quantity?\n"))
                         print()
                     except ValueError as err:
-                        print(err)
+                        warning(err)
 
                 # Remove from Cart
                 cart.removeItem(productID, productQty)
@@ -171,6 +185,7 @@ def main():
                 browsingAction = 6
 
             else:
+                warning("Please provide an option between 1 and 6")
                 browsingAction = None
 
         print("Have a wonderful day. Goodbye.")
@@ -188,14 +203,21 @@ def main():
 
 # Function used to validate UserActions
 def validateUserAction(action):
-    if action == "login":
-        return action
-    elif action == "register":
-        return action
-    elif action == "exit":
-        return action
-    else:
+    try:
+        # Test for int
+        action = int(action)
+        # Test for float
+        action = float(action)
         return None
+    except ValueError:
+        if action == "login":
+            return action
+        elif action == "register":
+            return action
+        elif action == "exit":
+            return action
+        else:
+            return None
 
 # Function used to validate logoutPrompt
 def validateLogoutAction(action):
@@ -213,6 +235,32 @@ def validateLogoutAction(action):
             return action
         else:
             return None
+
+def checkProductInList(productID, inventory):
+    try:
+        # Test for int
+        int(productID)
+        # Test for float
+        float(productID)
+        # Run Check
+        if (productID - 1) > len(inventory):
+            warning("Product ID is not in inventory")
+            return False
+        else:
+            return True
+    except ValueError:
+        return False
+    except Exception:
+        return False
+
+def warning(message):
+    print()
+    print("*************** WARNING ****************")
+    print("\n", end="")
+    print(message)
+    print("\n", end="")
+    print("*************** WARNING ****************")
+    print()
 
 # Function used to validate BrowsingActions
 def validateBrowsingAction(action):
