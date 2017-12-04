@@ -9,6 +9,7 @@ Run `index.py` either from IDLE or from terminal (mac) or cmd (windows).
 `CPSC 3310 ? Object Oriented Programming.docx` - Project report
 `index.py` - DVD Store program runs out of here
 `Readme.md` - Instructions file in MarkDown format
+`Instructions.txt` - Instructions file in plaintext format
 `product.csv` - Default product inventory file
 `dvd_store/__init__.py` - Package definition for dvd_store package
 `dvd_store/cart.py` - Store class to be used with dvd_store package
